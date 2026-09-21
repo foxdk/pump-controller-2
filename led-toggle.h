@@ -4,4 +4,4 @@
 void setupHeartbeatLed();
 void handleHeartbeatLed();
 
-#endif // LedToggle_h
+#endif  // LedToggle_h

@@ -12,13 +12,11 @@ const int sensorPin = D3;
 const unsigned long FLOW_DETECTED_MIN_COUNT = 4;
 bool flowing = false;
 
-void sensorISR()
-{
+void sensorISR() {
   currentFlowCount++;
 }
 
-void setupFlowCounter()
-{
+void setupFlowCounter() {
   pinMode(sensorPin, INPUT);
 
   currentFlowCount = 0;
@@ -29,21 +27,16 @@ void setupFlowCounter()
   attachInterrupt(digitalPinToInterrupt(sensorPin), sensorISR, FALLING);
 }
 
-void handleFlowCounter()
-{
+void handleFlowCounter() {
   unsigned long now = millis();
-  if ((now - lastTimeslice) >= TIMESLICE_PERIOD)
-  {
+  if ((now - lastTimeslice) >= TIMESLICE_PERIOD) {
     lastTimeslice = now;
     unsigned long snapshotCount = currentFlowCount;
     currentFlowCount = 0;
-    if (snapshotCount >= FLOW_DETECTED_MIN_COUNT && !flowing)
-    {
+    if (snapshotCount >= FLOW_DETECTED_MIN_COUNT && !flowing) {
       flowBegin();
       flowing = true;
-    }
-    else if (snapshotCount == 0 && flowing)
-    {
+    } else if (snapshotCount == 0 && flowing) {
       flowEnd();
       flowing = false;
     }

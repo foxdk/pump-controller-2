@@ -6,7 +6,7 @@
 
 void initializeLog();
 void logPrintln(const char *s);
-const char* getProgramNameAndVersion();
+const char *getProgramNameAndVersion();
 void sendToWebServer(WebServer &server);
 
-#endif // logger_h
+#endif  // logger_h

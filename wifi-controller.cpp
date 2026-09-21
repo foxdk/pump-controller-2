@@ -11,7 +11,7 @@ unsigned long lastConnectCheck;
 const unsigned long CONNECT_CHECK_INTERVAL = 10000;
 bool ipAddressPrinted = false;
 
-const unsigned long MAX_RECONNECT_TRIGGER = 24 * 3600 * 1000 / CONNECT_CHECK_INTERVAL; // one day max
+const unsigned long MAX_RECONNECT_TRIGGER = 24 * 3600 * 1000 / CONNECT_CHECK_INTERVAL;  // one day max
 unsigned long reconnectCounter = 0;
 unsigned long reconnectTrigger = 1;
 
@@ -26,102 +26,87 @@ const int daylightOffset_sec = 3600;
 WebServer server(80);
 
 // Function executed when a client requests the root URL ("/")
-void handleRoot()
-{
-    sendToWebServer(server);
+void handleRoot() {
+  sendToWebServer(server);
 }
 
 // Function executed for undefined URLs (404 Error)
-void handleNotFound()
-{
-    server.send(404, "text/plain", "404: Not Found");
+void handleNotFound() {
+  server.send(404, "text/plain", "404: Not Found");
 }
 
-void beginWiFi()
-{
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
+void beginWiFi() {
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
 
-    WiFi.persistent(false);
-    digitalWrite(blueLED, HIGH);
-    WiFi.begin(ssid, password);
+  WiFi.persistent(false);
+  digitalWrite(blueLED, HIGH);
+  WiFi.begin(ssid, password);
 }
 
-void increaseTriggerDelayExponentially()
-{
-    if (reconnectTrigger == 0)
-    {
-        reconnectTrigger = 1;
-    }
-    reconnectTrigger = 2 * reconnectTrigger;
-    if (reconnectTrigger > MAX_RECONNECT_TRIGGER)
-    {
-        reconnectTrigger = MAX_RECONNECT_TRIGGER;
-    }
+void increaseTriggerDelayExponentially() {
+  if (reconnectTrigger == 0) {
+    reconnectTrigger = 1;
+  }
+  reconnectTrigger = 2 * reconnectTrigger;
+  if (reconnectTrigger > MAX_RECONNECT_TRIGGER) {
+    reconnectTrigger = MAX_RECONNECT_TRIGGER;
+  }
 }
 
-void reconnectIfNeeded()
-{
-    unsigned long now = millis();
-    if ((now - lastConnectCheck) >= CONNECT_CHECK_INTERVAL)
-    {
-        lastConnectCheck = now;
-        if (WiFi.status() == WL_CONNECTED)
-        {
-            // Init and get the time
-            configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+void reconnectIfNeeded() {
+  unsigned long now = millis();
+  if ((now - lastConnectCheck) >= CONNECT_CHECK_INTERVAL) {
+    lastConnectCheck = now;
+    if (WiFi.status() == WL_CONNECTED) {
+      // Init and get the time
+      configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 
-            if (!ipAddressPrinted)
-            {
-                Serial.print("WiFi connected! IP Address: ");
-                Serial.println(WiFi.localIP());
-                ipAddressPrinted = true;
-                logPrintln("WiFi Initialized");
-            }
-            digitalWrite(blueLED, LOW);
-            reconnectCounter = 0;
-            reconnectTrigger = 1;
-        }
-        else
-        {
-            WiFi.disconnect();
-            digitalWrite(blueLED, LOW);
-            ipAddressPrinted = false;
-            if (++reconnectCounter >= reconnectTrigger)
-            {
-                reconnectCounter = 0;
-                increaseTriggerDelayExponentially();
-                beginWiFi();
-            }
-        }
+      if (!ipAddressPrinted) {
+        Serial.print("WiFi connected! IP Address: ");
+        Serial.println(WiFi.localIP());
+        ipAddressPrinted = true;
+        logPrintln("WiFi Initialized");
+      }
+      digitalWrite(blueLED, LOW);
+      reconnectCounter = 0;
+      reconnectTrigger = 1;
+    } else {
+      WiFi.disconnect();
+      digitalWrite(blueLED, LOW);
+      ipAddressPrinted = false;
+      if (++reconnectCounter >= reconnectTrigger) {
+        reconnectCounter = 0;
+        increaseTriggerDelayExponentially();
+        beginWiFi();
+      }
     }
+  }
 }
 
 // **** PUBLIC FUNCTIONS ****
 
-void setupWiFi()
-{
-    pinMode(blueLED, OUTPUT);
-    lastConnectCheck = millis() + 3000UL - CONNECT_CHECK_INTERVAL; // first check at 3 seconds
-    ipAddressPrinted = false;
+void setupWiFi() {
+  pinMode(blueLED, OUTPUT);
+  lastConnectCheck = millis() + 3000UL - CONNECT_CHECK_INTERVAL;  // first check at 3 seconds
+  ipAddressPrinted = false;
 
-    reconnectCounter = 0;
-    reconnectTrigger = 1;
+  reconnectCounter = 0;
+  reconnectTrigger = 1;
 
-    beginWiFi();
+  beginWiFi();
 
-    server.on("/", handleRoot);
-    server.onNotFound(handleNotFound);
+  server.on("/", handleRoot);
+  server.onNotFound(handleNotFound);
 
-    // Start the server
-    server.begin();
-    Serial.println("HTTP server started");
+  // Start the server
+  server.begin();
+  Serial.println("HTTP server started");
 }
 
-void handleWebClient()
-{
-    reconnectIfNeeded();
+void handleWebClient() {
+  reconnectIfNeeded();
 
-    // Continuously listen for incoming client requests
-    server.handleClient();
+  // Continuously listen for incoming client requests
+  server.handleClient();
 }

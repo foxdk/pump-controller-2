@@ -4,4 +4,4 @@
 void setupFlowCounter();
 void handleFlowCounter();
 
-#endif // FlowCounter_h
+#endif  // FlowCounter_h

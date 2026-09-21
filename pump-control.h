@@ -6,4 +6,4 @@ void flowBegin();
 void flowEnd();
 void handlePumpControl();
 
-#endif // OnFlow_h
+#endif  // OnFlow_h

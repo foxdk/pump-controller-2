@@ -5,15 +5,13 @@
 #include "logger.h"
 #include "pump-control.h"
 
-void warmUpSerial()
-{
+void warmUpSerial() {
   Serial.begin(115200);
-  delay(1000); // wait for Serial connection to warm up
+  delay(1000);  // wait for Serial connection to warm up
   Serial.println(getProgramNameAndVersion());
 }
 
-void setup()
-{
+void setup() {
   initializeLog();
   warmUpSerial();
   setupPumpControl();
@@ -22,8 +20,7 @@ void setup()
   setupWiFi();
 }
 
-void loop()
-{
+void loop() {
   handleHeartbeatLed();
   handleFlowCounter();
   handlePumpControl();

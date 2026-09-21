@@ -4,4 +4,4 @@
 void setupWiFi();
 void handleWebClient();
 
-#endif // WiFiController_h
+#endif  // WiFiController_h
