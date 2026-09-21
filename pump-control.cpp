@@ -13,6 +13,8 @@ unsigned long flowBeginMillis = 0;
 unsigned long largeFlowEndMillis = 0;
 boolean pumpIsOn = false;
 
+// PUBLIC FUNCTIONS
+
 void setupPumpControl() {
   pinMode(pumpRelayPin, OUTPUT);
   digitalWrite(pumpRelayPin, LOW);

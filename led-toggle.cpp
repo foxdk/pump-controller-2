@@ -6,6 +6,8 @@ const unsigned long LED_HALF_CYCLE_TIME = 25;
 unsigned long lastLedToggle = 0;
 boolean ledIsOn = false;
 
+// PUBLIC FUNCTIONS
+
 void setupHeartbeatLed() {
   // set up LED output for visual heartbeat and test purposes
   pinMode(heartbeatLed, OUTPUT);

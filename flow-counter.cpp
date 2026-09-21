@@ -16,6 +16,8 @@ void sensorISR() {
   currentFlowCount++;
 }
 
+// PUBLIC FUNCTIONS
+
 void setupFlowCounter() {
   pinMode(sensorPin, INPUT);
 

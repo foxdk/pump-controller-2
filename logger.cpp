@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <WebServer.h>
+#include <WiFi.h>
 #include "logger.h"
 
 const int ROW_SIZE = 64;
@@ -54,7 +55,7 @@ void copyCharsAddNewline(char *dest, const char *s, size_t max) {
   }
 }
 
-// PUBLIC METHODS
+// PUBLIC FUNCTIONS
 
 void initializeLog() {
   // set the first char of each row to null
@@ -73,7 +74,7 @@ void logPrintln(const char *s) {
 }
 
 const char *getProgramNameAndVersion() {
-  return "Pump Controller v 1.9.2";
+  return "Pump Controller v 2.0";
 }
 
 void sendHowLongRunning(WebServer &server) {
