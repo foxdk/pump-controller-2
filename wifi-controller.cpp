@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <time.h>
+#include "src/wifi-constants.h"
 #include "wifi-controller.h"
 #include "logger.h"
 
@@ -14,9 +15,6 @@ bool ipAddressPrinted = false;
 const unsigned long MAX_RECONNECT_TRIGGER = 24 * 3600 * 1000 / CONNECT_CHECK_INTERVAL;  // one day max
 unsigned long reconnectCounter = 0;
 unsigned long reconnectTrigger = 1;
-
-const char *ssid = "your-ssid-here";
-const char *password = "your-wifi-password-here";
 
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = -25200;
@@ -37,11 +35,11 @@ void handleNotFound() {
 
 void beginWiFi() {
   Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println(WIFI_SSID);
 
   WiFi.persistent(false);
   digitalWrite(blueLED, HIGH);
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
 }
 
 void increaseTriggerDelayExponentially() {
