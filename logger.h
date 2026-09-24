@@ -6,6 +6,7 @@
 
 void initializeLog();
 void logPrintln(const char *s);
+void logFlowln(unsigned long duration);
 const char *getProgramNameAndVersion();
 void sendToWebServer(WebServer &server);
 

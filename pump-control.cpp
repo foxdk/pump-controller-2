@@ -39,15 +39,8 @@ void flowEnd() {
   unsigned long duration = now - flowBeginMillis;
   if (duration >= LARGE_FLOW_MIN_DURATION_MILLIS) {
     largeFlowEndMillis = now;
-    char buf[50];
-    snprintf(buf, sizeof(buf), "large flow end, duration=%lu", duration);
-    logPrintln(buf);
-  } else {
-    // todo create better logging functions to simplify code like this
-    char buf[50];
-    snprintf(buf, sizeof(buf), "flow end, duration=%lu", duration);
-    logPrintln(buf);
   }
+  logFlowln(duration);
 }
 
 void handlePumpControl() {

@@ -73,8 +73,22 @@ void logPrintln(const char *s) {
   rowOffset = nextRow(rowOffset);
 }
 
+void logFlowln(unsigned long duration) {
+  unsigned long seconds = (duration + 500UL) / 1000UL;
+  if (seconds == 0UL) seconds = 1UL;
+  unsigned long modSeconds = seconds % 60UL;
+  unsigned long minutes = seconds / 60UL;
+  char buf[MAX_MESSAGE_SIZE + 1];
+  if (minutes > 0UL) {
+    snprintf(buf, sizeof(buf), "large flow end, duration: %lu:%02lu", minutes, modSeconds);
+  } else {
+    snprintf(buf, sizeof(buf), "flow end, duration: %lu:%02lu", minutes, modSeconds);
+  }
+  logPrintln(buf);
+}
+
 const char *getProgramNameAndVersion() {
-  return "Pump Controller v 2.0";
+  return "Pump Controller v 2.0.1";
 }
 
 void sendHowLongRunning(WebServer &server) {
