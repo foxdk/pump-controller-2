@@ -11,20 +11,19 @@ const unsigned long LARGE_FLOW_MIN_DURATION_MILLIS = 60 * 1000;
 unsigned long pumpStartMillis = 0;
 unsigned long flowBeginMillis = 0;
 unsigned long largeFlowEndMillis = 0;
-boolean pumpIsOn = false;
+bool pumpIsOn = false;
 
 void startPump() {
-  digitalWrite(pumpRelayPin, HIGH);
-  pumpIsOn = true;
   pumpStartMillis = millis();
+  pumpIsOn = true;
+  digitalWrite(pumpRelayPin, HIGH);
   logPrintln("Pump ON");
 }
 
-void stopPump(unsigned long now) {
-  largeFlowEndMillis = now;
+void stopPump(bool enableLogging) {
   digitalWrite(pumpRelayPin, LOW);
   pumpIsOn = false;
-  if (now != 0UL) {
+  if (enableLogging) {
     logPrintln("Pump off");
   }
 }
@@ -33,15 +32,16 @@ void stopPump(unsigned long now) {
 
 void setupPumpControl() {
   pinMode(pumpRelayPin, OUTPUT);
-  stopPump(0UL);
+  stopPump(false);
   pumpStartMillis = 0;
   flowBeginMillis = 0;
-  largeFlowEndMillis = millis() - MIN_WAIT_AFTER_LARGE_FLOW_MILLIS;  // start pump on first flow after reboot
+  largeFlowEndMillis = 0; // pump will not start for the first time until after MIN_WAIT_AFTER_LARGE_FLOW_MILLIS, for added safety
 }
 
 void flowBegin() {
-  flowBeginMillis = millis();
-  if (!pumpIsOn && (flowBeginMillis - largeFlowEndMillis) >= MIN_WAIT_AFTER_LARGE_FLOW_MILLIS) {
+  unsigned long now = millis();
+  flowBeginMillis = now;
+  if (!pumpIsOn && (now - largeFlowEndMillis) >= MIN_WAIT_AFTER_LARGE_FLOW_MILLIS) {
     startPump();
   }
 }
@@ -58,6 +58,6 @@ void flowEnd() {
 void handlePumpControl() {
   unsigned long now = millis();
   if (pumpIsOn && (now - pumpStartMillis) >= PUMP_RUN_DURATION_MILLIS) {
-    stopPump(now);
+    stopPump(true);
   }
 }
