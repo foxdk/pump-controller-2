@@ -34,12 +34,9 @@ void handleNotFound() {
 }
 
 void beginWiFi() {
-  Serial.print("Connecting to ");
-  Serial.println(WIFI_SSID);
-
-  WiFi.persistent(false);
   digitalWrite(blueLED, HIGH);
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  Serial.println("wi-fi connect attempt");
+  WiFi.begin();
 }
 
 void increaseTriggerDelayExponentially() {

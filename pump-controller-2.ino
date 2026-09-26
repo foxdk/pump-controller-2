@@ -6,6 +6,7 @@
 #include "wifi-controller.h"
 #include "logger.h"
 #include "pump-control.h"
+#include "command-line.h"
 
 const int PUMP_CTRL_WATCHDOG_TIMEOUT = 10 * 1000;  // 10 seconds without feeding watchdog = reboot
 hw_timer_t *watchdogTimer = NULL;
@@ -26,13 +27,14 @@ void warmUpSerial() {
 }
 
 void setup() {
+  warmUpSerial();
   setupWatchdogTimer();
   initializeLog();
-  warmUpSerial();
   setupPumpControl();
   setupHeartbeatLed();
   setupFlowCounter();
   setupWiFi();
+  setupCommandLine();
 }
 
 void loop() {
@@ -41,4 +43,5 @@ void loop() {
   handleFlowCounter();
   handlePumpControl();
   handleWebClient();
+  handleCommandLine();
 }
