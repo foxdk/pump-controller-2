@@ -1,3 +1,8 @@
+/*
+   Copyright (c) 2026 David K. Fox
+   This software is licensed under the MIT License. See the license file for details.
+   Source: github.com/foxdk/pump-controller-2
+ */
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
@@ -5,7 +10,7 @@
 #include "wifi-controller.h"
 #include "logger.h"
 
-const int blueLED = D5;
+const int attemptingConnectionLED = D5;
 
 unsigned long lastConnectCheck;
 const unsigned long CONNECT_CHECK_INTERVAL = 10000;
@@ -33,7 +38,7 @@ void handleNotFound() {
 }
 
 void beginWiFi() {
-  digitalWrite(blueLED, HIGH);
+  digitalWrite(attemptingConnectionLED, HIGH);
   Serial.println("wi-fi connect attempt");
   WiFi.begin();
 }
@@ -62,12 +67,12 @@ void reconnectIfNeeded() {
         ipAddressPrinted = true;
         logPrintln("WiFi Initialized");
       }
-      digitalWrite(blueLED, LOW);
+      digitalWrite(attemptingConnectionLED, LOW);
       reconnectCounter = 0;
       reconnectTrigger = 1;
     } else {
       WiFi.disconnect();
-      digitalWrite(blueLED, LOW);
+      digitalWrite(attemptingConnectionLED, LOW);
       ipAddressPrinted = false;
       if (++reconnectCounter >= reconnectTrigger) {
         reconnectCounter = 0;
@@ -81,7 +86,7 @@ void reconnectIfNeeded() {
 // **** PUBLIC FUNCTIONS ****
 
 void setupWiFi() {
-  pinMode(blueLED, OUTPUT);
+  pinMode(attemptingConnectionLED, OUTPUT);
   lastConnectCheck = millis() + 3000UL - CONNECT_CHECK_INTERVAL;  // first check at 3 seconds
   ipAddressPrinted = false;
 

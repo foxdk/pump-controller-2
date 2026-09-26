@@ -1,7 +1,13 @@
+/*
+   Copyright (c) 2026 David K. Fox
+   This software is licensed under the MIT License. See the license file for details.
+   Source: github.com/foxdk/pump-controller-2
+ */
 #include <Arduino.h>
 #include <WebServer.h>
 #include <WiFi.h>
 #include "logger.h"
+#include "pc-constants.h"
 
 const int ROW_SIZE = 64;
 const int NUMBER_ROWS = 100;
@@ -79,7 +85,7 @@ void logFlowln(unsigned long duration) {
   unsigned long modSeconds = seconds % 60UL;
   unsigned long minutes = seconds / 60UL;
   char buf[MAX_MESSAGE_SIZE + 1];
-  if (minutes > 0UL) {
+  if (minutes > 0UL || seconds > LARGE_FLOW_MIN_DURATION_SECONDS) {
     snprintf(buf, sizeof(buf), "large flow end, duration: %lu:%02lu", minutes, modSeconds);
   } else {
     snprintf(buf, sizeof(buf), "flow end, duration: %lu:%02lu", minutes, modSeconds);
@@ -88,7 +94,7 @@ void logFlowln(unsigned long duration) {
 }
 
 const char *getProgramNameAndVersion() {
-  return "Pump Controller v 2.1.3";
+  return "Pump Controller v 2.1.6";
 }
 
 void sendHowLongRunning(WebServer &server) {
