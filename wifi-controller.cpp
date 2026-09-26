@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <time.h>
-#include "src/wifi-constants.h"
 #include "wifi-controller.h"
 #include "logger.h"
 

@@ -11,9 +11,6 @@ Command cmdHelp;
 // PUBLIC FUNCTIONS
 
 void setupCommandLine() {
-  Serial.begin(115200);
-  delay(1000);
-
   cmdSetUpWiFi = cli.addCommand("setupwifi");
   cmdSetUpWiFi.setDescription(" Set up WiFi");
   cmdSetUpWiFi.addPositionalArgument("ssid");
@@ -23,9 +20,9 @@ void setupCommandLine() {
   cmdWdSelfTest.setDescription(" Run a watchdog self-test by going into an infinite loop (will cause reboot)");
 
   cmdHelp = cli.addCommand("help");
-  cmdHelp.setDescription(" Shows a description of each command");
+  cmdHelp.setDescription(" Show a description of each command");
 
-  Serial.println("Enter 'help' at the console");
+  Serial.println("Enter 'help' at the console to see available commands");
   Serial.println();
 }
 
@@ -54,7 +51,8 @@ void handleCommandLine() {
       while (true)
         ;
     } else if (c == cmdHelp) {
-      Serial.println("Help:");
+      Serial.println("Available commands:");
+      Serial.println();
       Serial.println(cli.toString());
     }
   }
