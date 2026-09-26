@@ -88,7 +88,7 @@ void logFlowln(unsigned long duration) {
 }
 
 const char *getProgramNameAndVersion() {
-  return "Pump Controller v 2.1.2";
+  return "Pump Controller v 2.1.3";
 }
 
 void sendHowLongRunning(WebServer &server) {
