@@ -24,6 +24,10 @@ The intent of this project, together with appropriate plumbing and hardware, is 
 
 ### Quick Start Guide
 
+#### Adjust Hard-Coded Configuration
+
+This project contains hard-code configuration values that depend on your own plumbing topology. See the values in pc-constants.h, study their use in the code, and change them to fit your own plumbing topology.
+
 #### Setting Wi-Fi Credentials
 
 1. Turn the controller off (so that the pump won't run)
@@ -51,4 +55,3 @@ Initially, I tried to use VSCode with the PlatformIO extension, but eventually d
 ## License Agreement and Disclaimer
 
 Please see the LICENSE file for the license agreement and disclaimer that applies to this project.
-
