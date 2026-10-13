@@ -85,7 +85,7 @@ void logFlowln(unsigned long duration) {
   unsigned long modSeconds = seconds % 60UL;
   unsigned long minutes = seconds / 60UL;
   char buf[MAX_MESSAGE_SIZE + 1];
-  if (minutes > 0UL || seconds > LARGE_FLOW_MIN_DURATION_SECONDS) {
+  if (minutes > 0UL || seconds >= LARGE_FLOW_MIN_DURATION_SECONDS) {
     snprintf(buf, sizeof(buf), "large flow end, duration: %lu:%02lu", minutes, modSeconds);
   } else {
     snprintf(buf, sizeof(buf), "flow end, duration: %lu:%02lu", minutes, modSeconds);
@@ -94,7 +94,7 @@ void logFlowln(unsigned long duration) {
 }
 
 const char *getProgramNameAndVersion() {
-  return "Pump Controller v 2.1.6";
+  return "Pump Controller v 2.1.7";
 }
 
 void sendHowLongRunning(WebServer &server) {
