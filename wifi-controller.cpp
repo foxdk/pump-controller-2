@@ -9,6 +9,7 @@
 #include <time.h>
 #include "wifi-controller.h"
 #include "logger.h"
+#include "pc-constants.h"
 
 const int attemptingConnectionLED = D5;
 
@@ -96,6 +97,27 @@ void setupWiFi() {
   beginWiFi();
 
   server.on("/", handleRoot);
+
+  server.on("/up", []() {
+    server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    server.send(200, "text/plain", "up!\n");
+    PUMP_RUN_DURATION_MILLIS += 5000;
+    char buf[20];
+    sprintf(buf, "%ld\n", PUMP_RUN_DURATION_MILLIS);
+    server.sendContent(buf);
+    server.sendContent("");
+  });
+
+  server.on("/dn", []() {
+    server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    server.send(200, "text/plain", "down!\n");
+    PUMP_RUN_DURATION_MILLIS -= 5000;
+    char buf[20];
+    sprintf(buf, "%ld\n", PUMP_RUN_DURATION_MILLIS);
+    server.sendContent(buf);
+    server.sendContent("");
+  });
+
   server.onNotFound(handleNotFound);
 
   // Start the server
